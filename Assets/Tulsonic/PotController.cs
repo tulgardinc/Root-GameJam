@@ -148,20 +148,18 @@ public class PotController : MonoBehaviour
 
     }
 
-
-
     private bool AddNewRoot(Vector3 pos, Vector3 dir, Sprite sprite)
     {
-        Collider2D col = Physics2D.OverlapBox(pos + dir * (stepSize), new Vector2(0.9f, 0.9f), 0);
+        Collider2D col = IsTileEmpty(pos + dir * (stepSize));
         if (col == null || col.gameObject.layer != LayerMask.NameToLayer("Root"))
         {
             if (col != null && col.gameObject.tag == "Pushable")
             {
-                var innerCol = Physics2D.OverlapBox(col.gameObject.transform.position + dir * (stepSize), new Vector2(0.9f, 0.9f), 0);
-                if (!innerCol)
+                var innerCol = IsTileEmpty(col.gameObject.transform.position + dir * (stepSize));
+                Pushable pushable = col.gameObject.GetComponent<Pushable>();
+                if (!innerCol && !pushable.isMoving)
                 {
-                    print("cugnugs");
-                    col.gameObject.GetComponent<Rigidbody2D>().AddForce(dir * 100);
+                    col.gameObject.GetComponent<Pushable>().StartMove(col.gameObject.transform.position + dir * stepSize);
                 }
                 else
                 {
@@ -176,6 +174,11 @@ public class PotController : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    private Collider2D IsTileEmpty(Vector3 pos)
+    {
+        return Physics2D.OverlapBox(pos, new Vector2(0.5f, 0.5f), 0);
     }
 
 }
