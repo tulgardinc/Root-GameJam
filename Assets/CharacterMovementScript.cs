@@ -100,6 +100,8 @@ public class CharacterMovementScript : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        Debug.Log("Enter");
+
         if (collision.transform.tag.Equals("climbable"))
         {
             rb.gravityScale = 0;
@@ -109,9 +111,11 @@ public class CharacterMovementScript : MonoBehaviour
     }
     private void OnTriggerStay2D(Collider2D collision)
     {
+        Debug.Log("Stay");
+
         if (collision.transform.tag.Equals("climbable"))
         {
-            if (Input.GetKeyDown(KeyCode.E) && !isClicked)
+            if (Input.GetKeyDown(KeyCode.E))
             {
                 rb.gravityScale = 0;
                 isClimbing = true;
@@ -131,10 +135,12 @@ public class CharacterMovementScript : MonoBehaviour
 
             }
 
+
         }
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
+        Debug.Log("Exit");
         if (collision.transform.tag.Equals("climbable"))
         {
             rb.gravityScale = 1;
