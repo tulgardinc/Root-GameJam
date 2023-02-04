@@ -27,6 +27,8 @@ public class CharacterMovementScript : MonoBehaviour
     bool isGrounded = false;
     bool isClimbing = false;
     bool isClicked = false;
+    bool isOnTri = false;
+    GameObject tempObject;
     int currentExtraJumpCount;
 
 
@@ -34,6 +36,7 @@ public class CharacterMovementScript : MonoBehaviour
     void Start()
     {
         currentExtraJumpCount = extraJumpCount;
+
     }
 
     void Update()
@@ -56,6 +59,28 @@ public class CharacterMovementScript : MonoBehaviour
                 currentExtraJumpCount--;
                 Jump();
             }
+        }
+        if(isOnTri)
+        {
+            if (Input.GetKeyDown(KeyCode.E) && !isClimbing)
+            {
+                rb.gravityScale = 0;
+                isClimbing = true;
+                isClicked = true;
+            }
+            else if (Input.GetKeyDown(KeyCode.E) && isClimbing)
+            {
+                isClicked = false;
+                rb.gravityScale = 1;
+                isClimbing = false;
+            }
+            if (isClimbing)
+            {
+                this.transform.position = new Vector2(tempObject.transform.position.x, transform.position.y);
+                Climb();
+            }
+
+           
         }
     }
 
@@ -101,54 +126,22 @@ public class CharacterMovementScript : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         Debug.Log("Enter");
-
-        if (collision.transform.tag.Equals("climbable"))
-        {
-            rb.gravityScale = 0;
-            isClimbing = true;
-
-        }
-    }
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        Debug.Log("Stay");
-
-        if (collision.transform.tag.Equals("climbable"))
-        {
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                rb.gravityScale = 0;
-                isClimbing = true;
-                isClicked = true;
-                Debug.Log("Climbing");
-            }
-            else
-            {
-                isClicked = false;
-                rb.gravityScale = 1;
-                isClimbing = false;
-            }
-            if (isClicked)
-            {
-                Climb();
-                this.transform.position = new Vector2(collision.transform.position.x, transform.position.y);
-
-            }
-
-
-        }
+        isOnTri = true;
+        tempObject = collision.gameObject;
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
         Debug.Log("Exit");
+        isOnTri = false;
         if (collision.transform.tag.Equals("climbable"))
         {
             rb.gravityScale = 1;
             isClimbing = false;
         }
         
-
     }
+
+
     
     void Climb()
     {
