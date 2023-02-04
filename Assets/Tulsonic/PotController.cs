@@ -151,6 +151,10 @@ public class PotController : MonoBehaviour
     private bool AddNewRoot(Vector3 pos, Vector3 dir, Sprite sprite)
     {
         Collider2D col = IsTileEmpty(pos + dir * (stepSize));
+        if (col != null && col.gameObject.layer == LayerMask.NameToLayer("Default") && dir != Vector3.down)
+        {
+            return false;
+        }
         if (col == null || col.gameObject.layer != LayerMask.NameToLayer("Root"))
         {
             if (col != null && col.gameObject.tag == "Pushable")
