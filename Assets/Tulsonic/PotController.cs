@@ -33,7 +33,6 @@ public class PotController : MonoBehaviour
         {
             lastRoot.root.GetComponent<SpriteRenderer>().sprite = verticalSprite;
         }
-        print(lastRoot.direction);
     }
 
     private void Update()
@@ -149,7 +148,8 @@ public class PotController : MonoBehaviour
 
     private bool AddNewRoot(Vector3 pos, Vector3 dir, Sprite sprite)
     {
-        if (!Physics2D.OverlapBox(pos + dir * (stepSize), new Vector2(0.9f, 0.9f), 0))
+        Collider2D col = Physics2D.OverlapBox(pos + dir * (stepSize), new Vector2(0.9f, 0.9f), 0);
+        if (col == null || col.gameObject.layer != LayerMask.NameToLayer("Root"))
         {
             GameObject newRoot = Instantiate(rootPrefab, pos + dir * stepSize, Quaternion.identity);
             newRoot.transform.parent = transform;
@@ -166,14 +166,12 @@ public class RootWithDirection
 {
     public GameObject root;
     const float stepSize = 1f;
-
+    public bool hasGrown = false;
     public Vector3 direction;
-
 
     public RootWithDirection(Vector3 direction, GameObject root)
     {
         this.direction = direction;
         this.root = root;
     }
-
 }
