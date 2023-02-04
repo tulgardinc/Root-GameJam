@@ -26,8 +26,9 @@ public class CharacterMovementScript : MonoBehaviour
     bool facingRight = true;
     bool isGrounded = false;
     bool isClimbing = false;
-    bool isClicked = false;
     bool isOnTri = false;
+    bool isOnCol = false;
+    BoxCollider2D test;
     GameObject tempObject;
     int currentExtraJumpCount;
 
@@ -36,6 +37,8 @@ public class CharacterMovementScript : MonoBehaviour
     void Start()
     {
         currentExtraJumpCount = extraJumpCount;
+        test = GetComponent<BoxCollider2D>();
+
 
     }
 
@@ -66,11 +69,9 @@ public class CharacterMovementScript : MonoBehaviour
             {
                 rb.gravityScale = 0;
                 isClimbing = true;
-                isClicked = true;
             }
             else if (Input.GetKeyDown(KeyCode.E) && isClimbing)
             {
-                isClicked = false;
                 rb.gravityScale = 1;
                 isClimbing = false;
             }
@@ -82,12 +83,24 @@ public class CharacterMovementScript : MonoBehaviour
 
            
         }
+        if (isOnCol)
+        {
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                test.isTrigger= true;
+            }
+        }else if (!isOnCol)
+        {
+            
+
+        }
+
     }
 
     void FixedUpdate()
     {
 
-
+        
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
         
         // Extra falling speed
@@ -121,7 +134,14 @@ public class CharacterMovementScript : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        
+        if(collision.transform.tag.Equals("standable"))
+        {
+            isOnCol = true;
+          
+        }
+    }
+    private void OnCollisionExit2D(Collision2D collision)
+    {
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -138,7 +158,14 @@ public class CharacterMovementScript : MonoBehaviour
             rb.gravityScale = 1;
             isClimbing = false;
         }
-        
+
+        if (collision.transform.tag.Equals("standable"))
+        {
+
+            test.isTrigger = false;
+           
+        }
+
     }
 
 
