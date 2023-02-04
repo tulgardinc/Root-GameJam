@@ -15,9 +15,19 @@ public class PotController : MonoBehaviour
     [SerializeField] Sprite topRightSprite;
     [SerializeField] Sprite bottomLeftSprite;
     [SerializeField] Sprite bottomRightSprite;
+    [SerializeField] float pushSpeed;
 
     List<RootWithDirection> roots = new List<RootWithDirection>();
     const float stepSize = 1f;
+    bool isBeingPushedUp = false;
+    Vector3 pushTarget;
+
+    Rigidbody2D rb;
+
+    private void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+    }
 
     private void DeleteLastRoot()
     {
@@ -35,8 +45,27 @@ public class PotController : MonoBehaviour
         }
     }
 
+    private void HandleBeingPushed()
+    {
+        if (isBeingPushedUp)
+        {
+            Vector3 difference = pushTarget - transform.position;
+            Vector2 velocity = new Vector2(difference.x, difference.y).normalized;
+            rb.MovePosition(new Vector2(transform.position.x, transform.position.y) + velocity * pushSpeed * Time.deltaTime);
+            if (Vector3.Distance(transform.position, pushTarget) < 0.2f)
+            {
+                transform.position = pushTarget;
+                isBeingPushedUp = false;
+                rb.bodyType = RigidbodyType2D.Dynamic;
+            }
+        }
+    }
+
     private void Update()
     {
+
+        HandleBeingPushed();
+
         if (roots.Count == 0)
         {
             if (Input.GetKeyDown(KeyCode.DownArrow))
@@ -150,11 +179,9 @@ public class PotController : MonoBehaviour
 
     private bool AddNewRoot(Vector3 pos, Vector3 dir, Sprite sprite)
     {
+        if (isBeingPushedUp) return false;
+
         Collider2D col = IsTileEmpty(pos + dir * (stepSize));
-        if (col != null && col.gameObject.layer == LayerMask.NameToLayer("Default") && dir != Vector3.down)
-        {
-            return false;
-        }
         if (col == null || col.gameObject.layer != LayerMask.NameToLayer("Root"))
         {
             if (col != null && col.gameObject.tag == "Pushable")
@@ -168,6 +195,20 @@ public class PotController : MonoBehaviour
                 else
                 {
                     return false;
+                }
+            }
+            print(pos);
+            if (col != null && col.gameObject.layer == LayerMask.NameToLayer("Default"))
+            {
+                if (dir != Vector3.down)
+                {
+                    return false;
+                }
+                else
+                {
+                    isBeingPushedUp = true;
+                    rb.bodyType = RigidbodyType2D.Kinematic;
+                    pushTarget = transform.position + Vector3.up * stepSize;
                 }
             }
             GameObject newRoot = Instantiate(rootPrefab, pos + dir * stepSize, Quaternion.identity);
