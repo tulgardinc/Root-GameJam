@@ -6,6 +6,9 @@ TagManager:
   tags:
   - climbable
   - standable
+  - pressure plate
+  - button
+  - block
   layers:
   - Default
   - TransparentFX
