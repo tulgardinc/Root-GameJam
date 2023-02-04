@@ -57,6 +57,7 @@ public class PotController : MonoBehaviour
                 }
                 else
                 {
+                    print(lastRoot.root);
                     if (AddNewRoot(lastRoot.root.transform.position, Vector3.down, verticalSprite))
                     {
                         if (lastRoot.direction == Vector3.right)
@@ -145,45 +146,30 @@ public class PotController : MonoBehaviour
             }
         }
 
-        GrowRoots();
     }
 
-    private void GrowRoots()
-    {
-        foreach (var rootDec in roots)
-        {
-            if (!rootDec.hasGrown)
-            {
-                rootDec.root.transform.localScale += rootDec.direction * Time.deltaTime;
-                if ((rootDec.direction == Vector3.right || rootDec.direction == Vector3.left)
-                && Mathf.Abs(rootDec.root.transform.localScale.y) >= 1)
-                {
-                    rootDec.root.transform.localScale = new Vector2(rootDec.root.transform.localScale.x, 1);
-                    rootDec.hasGrown = true;
-                }
-                else if (Mathf.Abs(rootDec.root.transform.localScale.x) == 1)
-                {
-                    rootDec.root.transform.localScale = new Vector2(1, rootDec.root.transform.localScale.y);
-                    rootDec.hasGrown = true;
-                }
-            }
-        }
-    }
+
 
     private bool AddNewRoot(Vector3 pos, Vector3 dir, Sprite sprite)
     {
         Collider2D col = Physics2D.OverlapBox(pos + dir * (stepSize), new Vector2(0.9f, 0.9f), 0);
         if (col == null || col.gameObject.layer != LayerMask.NameToLayer("Root"))
         {
+            if (col != null && col.gameObject.tag == "Pushable")
+            {
+                var innerCol = Physics2D.OverlapBox(col.gameObject.transform.position + dir * (stepSize), new Vector2(0.9f, 0.9f), 0);
+                if (!innerCol)
+                {
+                    print("cugnugs");
+                    col.gameObject.GetComponent<Rigidbody2D>().AddForce(dir * 100);
+                }
+                else
+                {
+                    return false;
+                }
+            }
             GameObject newRoot = Instantiate(rootPrefab, pos + dir * stepSize, Quaternion.identity);
-            if (dir == Vector3.left || dir == Vector3.right)
-            {
-                newRoot.transform.localScale = new Vector3(0, newRoot.transform.localScale.y, 1);
-            }
-            else if (dir == Vector3.up || dir == Vector3.down)
-            {
-                newRoot.transform.localScale = new Vector3(newRoot.transform.localScale.x, 0, 1);
-            }
+
             newRoot.transform.parent = transform;
             newRoot.GetComponent<SpriteRenderer>().sprite = sprite;
             roots.Add(new RootWithDirection(dir, newRoot));
@@ -198,7 +184,6 @@ public class RootWithDirection
 {
     public GameObject root;
     const float stepSize = 1f;
-    public bool hasGrown = false;
     public Vector3 direction;
 
     public RootWithDirection(Vector3 direction, GameObject root)
