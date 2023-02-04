@@ -20,6 +20,8 @@ public class CharacterMovementScript : MonoBehaviour
     [Header("Special")]
     [SerializeField] int extraJumpCount;
     [SerializeField] float climbSpeed;
+        [SerializeField] LayerMask altLayer;
+
 
 
     float input;
@@ -28,6 +30,7 @@ public class CharacterMovementScript : MonoBehaviour
     bool isClimbing = false;
     bool isOnTri = false;
     bool isOnCol = false;
+    
     BoxCollider2D test;
     GameObject tempObject;
     int currentExtraJumpCount;
@@ -89,12 +92,7 @@ public class CharacterMovementScript : MonoBehaviour
             {
                 test.isTrigger= true;
             }
-        }else if (!isOnCol)
-        {
-            
-
         }
-
     }
 
     void FixedUpdate()
@@ -142,6 +140,7 @@ public class CharacterMovementScript : MonoBehaviour
     }
     private void OnCollisionExit2D(Collision2D collision)
     {
+        isOnCol = false;
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -161,7 +160,7 @@ public class CharacterMovementScript : MonoBehaviour
 
         if (collision.transform.tag.Equals("standable"))
         {
-
+            isOnCol= false;
             test.isTrigger = false;
            
         }
