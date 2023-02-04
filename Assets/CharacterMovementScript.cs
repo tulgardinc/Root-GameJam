@@ -26,6 +26,7 @@ public class CharacterMovementScript : MonoBehaviour
     bool facingRight = true;
     bool isGrounded = false;
     bool isClimbing = false;
+    bool isClicked = false;
     int currentExtraJumpCount;
 
 
@@ -61,10 +62,11 @@ public class CharacterMovementScript : MonoBehaviour
     void FixedUpdate()
     {
 
+
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
         
         // Extra falling speed
-        if (!isGrounded)
+        if (!isGrounded && !isClimbing)
         {
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y - fallSpeed);
         }
@@ -75,8 +77,6 @@ public class CharacterMovementScript : MonoBehaviour
         {
             Flip();
         }
-
-
 
     }
 
@@ -98,27 +98,65 @@ public class CharacterMovementScript : MonoBehaviour
     {
         
     }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.transform.tag.Equals("climbable"))
+        {
+            rb.gravityScale = 0;
+            isClimbing = true;
+
+        }
+    }
     private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.transform.tag.Equals("climbable"))
         {
-            Climb();
+            if (Input.GetKeyDown(KeyCode.E) && !isClicked)
+            {
+                rb.gravityScale = 0;
+                isClimbing = true;
+                isClicked = true;
+                Debug.Log("Climbing");
+            }
+            else
+            {
+                isClicked = false;
+                rb.gravityScale = 1;
+                isClimbing = false;
+            }
+            if (isClicked)
+            {
+                Climb();
+                this.transform.position = new Vector2(collision.transform.position.x, transform.position.y);
+
+            }
 
         }
     }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.transform.tag.Equals("climbable"))
+        {
+            rb.gravityScale = 1;
+            isClimbing = false;
+        }
+        
 
+    }
+    
     void Climb()
     {
-        if(Input.GetKey(KeyCode.E))
+        if(Input.GetKey(KeyCode.W))
         {
             this.transform.position = new Vector2(transform.position.x, transform.position.y + climbSpeed);
-            rb.bodyType = RigidbodyType2D.Static;
+            
             //rb.velocity = new vector2(rb.velocity.x , rb.velocity.y + climbspeed);
         }
-        else
+        else if (Input.GetKey(KeyCode.S))
         {
-            rb.bodyType = RigidbodyType2D.Dynamic;
+            this.transform.position = new Vector2(transform.position.x, transform.position.y - climbSpeed);
 
+            //rb.velocity = new vector2(rb.velocity.x , rb.velocity.y + climbspeed);
         }
 
 
