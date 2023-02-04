@@ -23,6 +23,7 @@ public class PotController : MonoBehaviour
     {
         Destroy(roots[roots.Count - 1].root);
         roots.RemoveAt(roots.Count - 1);
+        // change corner to straight piece
     }
 
     private void Update()
