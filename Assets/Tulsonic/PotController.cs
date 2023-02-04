@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Unity.VisualStudio.Editor;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Animations;
 
 public class PotController : MonoBehaviour
 {
@@ -46,7 +47,17 @@ public class PotController : MonoBehaviour
                 }
                 else
                 {
-                    roots.Add(AddRoot(lastRoot.root.transform.position, Vector3.down, verticalSprite));
+                    if (AddNewRoot(lastRoot.root.transform.position, Vector3.down, verticalSprite))
+                    {
+                        if (lastRoot.direction == Vector3.right)
+                        {
+                            lastRoot.root.GetComponent<SpriteRenderer>().sprite = topRightSprite;
+                        }
+                        else if (lastRoot.direction == Vector3.left)
+                        {
+                            lastRoot.root.GetComponent<SpriteRenderer>().sprite = topLeftSprite;
+                        }
+                    }
                 }
             }
             else if (Input.GetKeyDown(KeyCode.LeftArrow))
@@ -57,7 +68,17 @@ public class PotController : MonoBehaviour
                 }
                 else
                 {
-                    roots.Add(AddRoot(lastRoot.root.transform.position, Vector3.left, horizontalSprite));
+                    if (AddNewRoot(lastRoot.root.transform.position, Vector3.left, horizontalSprite))
+                    {
+                        if (lastRoot.direction == Vector3.up)
+                        {
+                            lastRoot.root.GetComponent<SpriteRenderer>().sprite = topRightSprite;
+                        }
+                        else if (lastRoot.direction == Vector3.down)
+                        {
+                            lastRoot.root.GetComponent<SpriteRenderer>().sprite = bottomRightSprite;
+                        }
+                    }
                 }
             }
             else if (Input.GetKeyDown(KeyCode.RightArrow))
@@ -68,7 +89,18 @@ public class PotController : MonoBehaviour
                 }
                 else
                 {
-                    roots.Add(AddRoot(lastRoot.root.transform.position, Vector3.right, horizontalSprite));
+                    if (AddNewRoot(lastRoot.root.transform.position, Vector3.right, horizontalSprite))
+                    {
+
+                        if (lastRoot.direction == Vector3.up)
+                        {
+                            lastRoot.root.GetComponent<SpriteRenderer>().sprite = topLeftSprite;
+                        }
+                        else if (lastRoot.direction == Vector3.down)
+                        {
+                            lastRoot.root.GetComponent<SpriteRenderer>().sprite = bottomLeftSprite;
+                        }
+                    }
                 }
             }
             else if (Input.GetKeyDown(KeyCode.UpArrow))
@@ -79,18 +111,42 @@ public class PotController : MonoBehaviour
                 }
                 else
                 {
-                    roots.Add(AddRoot(lastRoot.root.transform.position, Vector3.up, verticalSprite));
+                    if (AddNewRoot(lastRoot.root.transform.position, Vector3.up, verticalSprite))
+                    {
+                        if (lastRoot.direction == Vector3.right)
+                        {
+                            lastRoot.root.GetComponent<SpriteRenderer>().sprite = bottomRightSprite;
+                        }
+                        else if (lastRoot.direction == Vector3.left)
+                        {
+                            lastRoot.root.GetComponent<SpriteRenderer>().sprite = bottomLeftSprite;
+                        }
+                    }
                 }
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            for (int i = roots.Count - 1; i >= 0; i--)
+            {
+                Destroy(roots[i].root);
+                roots.RemoveAt(i);
             }
         }
     }
 
-    private RootWithDirection AddRoot(Vector3 pos, Vector3 dir, Sprite sprite)
+    private bool AddNewRoot(Vector3 pos, Vector3 dir, Sprite sprite)
     {
-        GameObject newRoot = Instantiate(rootPrefab, pos + dir * stepSize, Quaternion.identity);
-        newRoot.transform.parent = transform;
-        newRoot.GetComponent<SpriteRenderer>().sprite = sprite;
-        return new RootWithDirection(dir, newRoot);
+        if (!Physics2D.OverlapBox(pos + dir * (stepSize), new Vector2(0.9f, 0.9f), 0))
+        {
+            GameObject newRoot = Instantiate(rootPrefab, pos + dir * stepSize, Quaternion.identity);
+            newRoot.transform.parent = transform;
+            newRoot.GetComponent<SpriteRenderer>().sprite = sprite;
+            roots.Add(new RootWithDirection(dir, newRoot));
+            return true;
+        }
+        return false;
     }
 
 }
