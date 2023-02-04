@@ -321,7 +321,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 3.8969498
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -555,7 +555,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Sprite: {fileID: -1336661906, guid: 0adb004e9b11fc3e7920015b322efd3e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -616,7 +616,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1949830850}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -641,60 +641,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ea6cacdfa60a804c9b2f94e7b887133, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1001 &2052059310
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 7352248916149635588, guid: 18d0a0f3dba7c4d81b4c12de2b1ba4d0, type: 3}
-      propertyPath: m_Name
-      value: Root
-      objectReference: {fileID: 0}
-    - target: {fileID: 7352248916149635595, guid: 18d0a0f3dba7c4d81b4c12de2b1ba4d0, type: 3}
-      propertyPath: m_RootOrder
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 7352248916149635595, guid: 18d0a0f3dba7c4d81b4c12de2b1ba4d0, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -2.9468694
-      objectReference: {fileID: 0}
-    - target: {fileID: 7352248916149635595, guid: 18d0a0f3dba7c4d81b4c12de2b1ba4d0, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 2.6110535
-      objectReference: {fileID: 0}
-    - target: {fileID: 7352248916149635595, guid: 18d0a0f3dba7c4d81b4c12de2b1ba4d0, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.071101554
-      objectReference: {fileID: 0}
-    - target: {fileID: 7352248916149635595, guid: 18d0a0f3dba7c4d81b4c12de2b1ba4d0, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7352248916149635595, guid: 18d0a0f3dba7c4d81b4c12de2b1ba4d0, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7352248916149635595, guid: 18d0a0f3dba7c4d81b4c12de2b1ba4d0, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7352248916149635595, guid: 18d0a0f3dba7c4d81b4c12de2b1ba4d0, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7352248916149635595, guid: 18d0a0f3dba7c4d81b4c12de2b1ba4d0, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7352248916149635595, guid: 18d0a0f3dba7c4d81b4c12de2b1ba4d0, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7352248916149635595, guid: 18d0a0f3dba7c4d81b4c12de2b1ba4d0, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 18d0a0f3dba7c4d81b4c12de2b1ba4d0, type: 3}
+  rootPoint: {fileID: 1851430346}
+  rootPrefab: {fileID: 4230256713425126134, guid: 4684e062ffc4634208362110abda9602, type: 3}
+  horizontalSprite: {fileID: -83200378, guid: 0adb004e9b11fc3e7920015b322efd3e, type: 3}
+  verticalSprite: {fileID: -447852534, guid: 0adb004e9b11fc3e7920015b322efd3e, type: 3}
+  topLeftSprite: {fileID: -1461006381, guid: 0adb004e9b11fc3e7920015b322efd3e, type: 3}
+  topRightSprite: {fileID: 1858269553, guid: 0adb004e9b11fc3e7920015b322efd3e, type: 3}
+  bottomLeftSprite: {fileID: -1360804883, guid: 0adb004e9b11fc3e7920015b322efd3e, type: 3}
+  bottomRightSprite: {fileID: 1668261398, guid: 0adb004e9b11fc3e7920015b322efd3e, type: 3}

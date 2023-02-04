@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Microsoft.Unity.VisualStudio.Editor;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -7,53 +8,89 @@ public class PotController : MonoBehaviour
 {
     [SerializeField] GameObject rootPoint;
     [SerializeField] GameObject rootPrefab;
+    [SerializeField] Sprite horizontalSprite;
+    [SerializeField] Sprite verticalSprite;
+    [SerializeField] Sprite topLeftSprite;
+    [SerializeField] Sprite topRightSprite;
+    [SerializeField] Sprite bottomLeftSprite;
+    [SerializeField] Sprite bottomRightSprite;
+
     List<RootWithDirection> roots = new List<RootWithDirection>();
+    const float stepSize = 1f;
+
+    private void DeleteLastRoot()
+    {
+        Destroy(roots[roots.Count - 1].root);
+        roots.RemoveAt(roots.Count - 1);
+    }
 
     private void Update()
     {
-        Vector2 input = new Vector2(Input.GetAxis("HorizontalPot"), Input.GetAxis("VerticalPot")).normalized;
-
-        RootWithDirection lastRoot = roots.Count > 0 ? roots[roots.Count - 1] : null;
-
-        print(input);
-
-        if (input.magnitude != 0)
+        if (roots.Count == 0)
         {
-            if (lastRoot != null)
+            if (Input.GetKeyDown(KeyCode.DownArrow))
             {
-                if (input == lastRoot.direction)
+                roots.Add(new RootWithDirection(Vector3.down, Instantiate(rootPrefab, rootPoint.transform.position, Quaternion.identity)));
+                roots[roots.Count - 1].root.transform.parent = transform;
+                roots[roots.Count - 1].root.GetComponent<SpriteRenderer>().sprite = verticalSprite;
+            }
+        }
+        else
+        {
+            RootWithDirection lastRoot = roots[roots.Count - 1];
+            if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                if (lastRoot.direction == Vector3.up)
                 {
-                    lastRoot.Extend();
-                }
-                else if (input == lastRoot.direction)
-                {
-                    lastRoot.Shrink();
-                    if (lastRoot.IsDead())
-                    {
-                        Destroy(lastRoot.root);
-                        roots.RemoveAt(roots.Count - 1);
-                    }
+                    DeleteLastRoot();
                 }
                 else
                 {
-                    roots.Add(new RootWithDirection(input, Instantiate(
-                        rootPoint,
-                        lastRoot.root.transform.position + new Vector3(input.x, input.y, 0),
-                        Quaternion.LookRotation(input, Vector3.forward)
-                        )
-                    ));
+                    roots.Add(AddRoot(lastRoot.root.transform.position, Vector3.down, verticalSprite));
                 }
             }
-            else if (input.y < 0)
+            else if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
-                roots.Add(new RootWithDirection(input, Instantiate(
-                    rootPoint,
-                    transform.position + Vector3.down * 0.5f,
-                    Quaternion.LookRotation(Vector3.down, Vector3.forward)
-                    )
-                ));
+                if (lastRoot.direction == Vector3.right)
+                {
+                    DeleteLastRoot();
+                }
+                else
+                {
+                    roots.Add(AddRoot(lastRoot.root.transform.position, Vector3.left, horizontalSprite));
+                }
+            }
+            else if (Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                if (lastRoot.direction == Vector3.left)
+                {
+                    DeleteLastRoot();
+                }
+                else
+                {
+                    roots.Add(AddRoot(lastRoot.root.transform.position, Vector3.right, horizontalSprite));
+                }
+            }
+            else if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                if (lastRoot.direction == Vector3.down)
+                {
+                    DeleteLastRoot();
+                }
+                else
+                {
+                    roots.Add(AddRoot(lastRoot.root.transform.position, Vector3.up, verticalSprite));
+                }
             }
         }
+    }
+
+    private RootWithDirection AddRoot(Vector3 pos, Vector3 dir, Sprite sprite)
+    {
+        GameObject newRoot = Instantiate(rootPrefab, pos + dir * stepSize, Quaternion.identity);
+        newRoot.transform.parent = transform;
+        newRoot.GetComponent<SpriteRenderer>().sprite = sprite;
+        return new RootWithDirection(dir, newRoot);
     }
 
 }
@@ -61,26 +98,15 @@ public class PotController : MonoBehaviour
 public class RootWithDirection
 {
     public GameObject root;
-    public Vector2 direction;
     const float stepSize = 1f;
 
-    public RootWithDirection(Vector2 direction, GameObject root)
+    public Vector3 direction;
+
+
+    public RootWithDirection(Vector3 direction, GameObject root)
     {
         this.direction = direction;
+        this.root = root;
     }
 
-    public void Extend()
-    {
-        root.transform.localScale += new Vector3(direction.x, direction.y, 0) * stepSize;
-    }
-
-    public void Shrink()
-    {
-        root.transform.localScale -= new Vector3(direction.x, direction.y, 0) * stepSize;
-    }
-
-    public bool IsDead()
-    {
-        return root.transform.localScale.x == 0 || root.transform.localScale.y == 0;
-    }
 }
