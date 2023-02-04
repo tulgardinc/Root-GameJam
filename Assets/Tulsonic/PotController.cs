@@ -33,7 +33,6 @@ public class PotController : MonoBehaviour
     {
         Destroy(roots[roots.Count - 1].root);
         roots.RemoveAt(roots.Count - 1);
-        // change corner to straight piece
         var lastRoot = roots[roots.Count - 1];
         if (lastRoot.direction == Vector3.right || lastRoot.direction == Vector3.left)
         {
