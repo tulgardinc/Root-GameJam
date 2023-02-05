@@ -50,6 +50,7 @@ public class PickupSystem : MonoBehaviour
                 itemGetAnimation.SetBool("isPicked", false);
                 itemPicked = false;
                 temp.GetComponent<Rigidbody2D>().gravityScale = 1;
+
             }
 
             if (itemPicked)
@@ -62,13 +63,14 @@ public class PickupSystem : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (isItemInRange)
+        if (isItemInRange && collision.gameObject.tag.Equals("flower"))
         {
             int layer = collision.gameObject.layer;
 
-            if (layer == LayerMask.NameToLayer("Tree"))
+            if (layer == LayerMask.NameToLayer("Root"))
             {
                 temp = collision.gameObject;
+               
             }
             
         }
