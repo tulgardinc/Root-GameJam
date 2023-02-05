@@ -4,75 +4,49 @@ using UnityEngine;
 
 public class PickupSystem : MonoBehaviour
 {
-    bool isItemInRange;
+    Collider2D itemInRange;
     [SerializeField] float canGetRadius;
     [SerializeField] LayerMask itemLayer;
     [SerializeField] Transform itemPos;
     bool itemPicked = false;
-    bool isClicked = false;
     [SerializeField] Animator itemGetAnimation;
 
+    GameObject pickedObject;
 
-
-    GameObject temp;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-    void FixedUpdate()
-    {
-        isItemInRange = Physics2D.OverlapCircle(transform.position, canGetRadius, itemLayer);
-
-
-
-    }
-    // Update is called once per frame
     void Update()
     {
-        Debug.Log(isItemInRange);
-        if (isItemInRange)
+        Collider2D candidate = Physics2D.OverlapCircle(transform.position, canGetRadius, itemLayer);
+        if (candidate && candidate.gameObject.tag == "flower")
         {
-            Debug.Log("inRange");
-            if (Input.GetKeyDown(KeyCode.R) && !isClicked)
-            {
-                isClicked= true;
-                itemGetAnimation.SetBool("isPicked", true);
+            itemInRange = candidate;
+        }
 
-                Debug.Log("picked");
-                itemPicked = true;
-                temp.GetComponent<Rigidbody2D>().gravityScale = 0;
-               
-               
-            } else if (Input.GetKeyDown(KeyCode.R) && isClicked)
+        if (itemInRange)
+        {
+            if (Input.GetKeyDown(KeyCode.E))
             {
-                isClicked = false;
-                itemGetAnimation.SetBool("isPicked", false);
-                itemPicked = false;
-                temp.GetComponent<Rigidbody2D>().gravityScale = 1;
-
+                if (itemPicked)
+                {
+                    itemGetAnimation.SetBool("isPicked", false);
+                    itemPicked = false;
+                    pickedObject.GetComponent<Rigidbody2D>().gravityScale = 1;
+                    pickedObject = null;
+                }
+                else
+                {
+                    itemGetAnimation.SetBool("isPicked", true);
+                    pickedObject = itemInRange.gameObject;
+                    Debug.Log("picked");
+                    itemPicked = true;
+                    pickedObject.GetComponent<Rigidbody2D>().gravityScale = 0;
+                }
             }
 
             if (itemPicked)
             {
-                temp.transform.position = itemPos.transform.position;
+                pickedObject.transform.position = itemPos.transform.position;
             }
-
-        }
-        
-    }
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (isItemInRange && collision.gameObject.tag.Equals("flower"))
-        {
-            int layer = collision.gameObject.layer;
-
-            if (layer == LayerMask.NameToLayer("Root"))
-            {
-                temp = collision.gameObject;
-               
-            }
-            
         }
     }
+
 }
