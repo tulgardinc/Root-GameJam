@@ -20,7 +20,9 @@ public class CharacterMovementScript : MonoBehaviour
     [Header("Special")]
     [SerializeField] int extraJumpCount;
     [SerializeField] float climbSpeed;
-        [SerializeField] LayerMask altLayer;
+    [SerializeField] LayerMask altLayer;
+
+    [SerializeField] Animator animatorCharacter;
 
 
 
@@ -30,7 +32,7 @@ public class CharacterMovementScript : MonoBehaviour
     bool isClimbing = false;
     bool isOnTri = false;
     bool isOnCol = false;
-    
+    float tempInt;
     BoxCollider2D test;
     GameObject tempObject;
     int currentExtraJumpCount;
@@ -47,15 +49,33 @@ public class CharacterMovementScript : MonoBehaviour
 
     void Update()
     {
+        
         input = Input.GetAxisRaw("Horizontal");
+
+        if(Input.GetAxis("Horizontal") != 0)
+        {
+
+            animatorCharacter.SetBool("isWalking", true);
+
+        }
+        else
+        {
+            animatorCharacter.SetBool("isWalking", false);
+
+        }
 
         if (isGrounded)
         {
             currentExtraJumpCount = extraJumpCount;
+            animatorCharacter.SetBool("isJumping", false);
+
         }
+
 
         if (Input.GetButtonDown("Jump"))
         {
+            animatorCharacter.SetBool("isJumping", true);
+
             if (isGrounded || currentExtraJumpCount > 0)
             {
                 Jump();
@@ -66,25 +86,35 @@ public class CharacterMovementScript : MonoBehaviour
                 Jump();
             }
         }
-        if(isOnTri)
+        if(isOnTri && !animatorCharacter.GetBool("isPicked"))
         {
             if (Input.GetKeyDown(KeyCode.E) && !isClimbing)
             {
                 rb.gravityScale = 0;
                 isClimbing = true;
+
             }
             else if (Input.GetKeyDown(KeyCode.E) && isClimbing)
             {
                 rb.gravityScale = 1;
                 isClimbing = false;
+
             }
             if (isClimbing)
             {
                 this.transform.position = new Vector2(tempObject.transform.position.x, transform.position.y);
                 Climb();
+                animatorCharacter.SetBool("isClimbing", true);
+
+
+            }
+            else
+            {
+                animatorCharacter.SetBool("isClimbing", false);
+
             }
 
-           
+
         }
         if (isOnCol)
         {
@@ -106,8 +136,7 @@ public class CharacterMovementScript : MonoBehaviour
         {
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y - fallSpeed);
         }
-
-        rb.velocity = new Vector2(input * speed, rb.velocity.y);
+        rb.velocity = new Vector2(input * speed*Time.deltaTime, rb.velocity.y);
 
         if (input != 0 && facingRight != input > 0)
         {
@@ -119,6 +148,7 @@ public class CharacterMovementScript : MonoBehaviour
     void Jump()
     {
         rb.velocity = Vector2.up * jumpForce;
+
     }
 
     void Flip()
@@ -156,6 +186,8 @@ public class CharacterMovementScript : MonoBehaviour
         {
             rb.gravityScale = 1;
             isClimbing = false;
+            animatorCharacter.SetBool("isClimbing", false);
+
         }
 
         if (collision.transform.tag.Equals("standable"))
@@ -173,13 +205,13 @@ public class CharacterMovementScript : MonoBehaviour
     {
         if(Input.GetKey(KeyCode.W))
         {
-            this.transform.position = new Vector2(transform.position.x, transform.position.y + climbSpeed);
+            this.transform.position = new Vector2(transform.position.x, transform.position.y + climbSpeed*Time.deltaTime);
             
             //rb.velocity = new vector2(rb.velocity.x , rb.velocity.y + climbspeed);
         }
         else if (Input.GetKey(KeyCode.S))
         {
-            this.transform.position = new Vector2(transform.position.x, transform.position.y - climbSpeed);
+            this.transform.position = new Vector2(transform.position.x, transform.position.y - climbSpeed*Time.deltaTime);
 
             //rb.velocity = new vector2(rb.velocity.x , rb.velocity.y + climbspeed);
         }

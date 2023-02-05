@@ -796,6 +796,7 @@ GameObject:
   - component: {fileID: 399836758}
   - component: {fileID: 399836761}
   - component: {fileID: 399836762}
+  - component: {fileID: 399836763}
   m_Layer: 0
   m_Name: PlayerTemp
   m_TagString: Untagged
@@ -811,7 +812,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 399836755}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.25, y: 3.49, z: 10}
+  m_LocalPosition: {x: -2.69, y: 2.93, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -854,7 +855,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 399836758}
-  speed: 10
+  speed: 50
   jumpForce: 20
   fallSpeed: 1
   checkRadius: 0.1
@@ -863,10 +864,11 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 192
   extraJumpCount: 0
-  climbSpeed: 0.01
+  climbSpeed: 3
   altLayer:
     serializedVersion: 2
     m_Bits: 0
+  animatorCharacter: {fileID: 399836763}
 --- !u!212 &399836760
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -908,7 +910,7 @@ SpriteRenderer:
   m_SortingLayerID: -1599754619
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: -9095717837082945937, guid: 207ee8102dd4143d288186ef0be518ee, type: 3}
+  m_Sprite: {fileID: 1234930041, guid: 4e62298db82985543b8cee323c0b7f7a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -932,18 +934,18 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.00000011920929, y: -0.00000011920929}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 2}
+    oldSize: {x: 2, y: 2}
     newSize: {x: 1, y: 2}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 2}
+  m_Size: {x: 0.51936936, y: 1.7507842}
   m_EdgeRadius: 0
 --- !u!114 &399836762
 MonoBehaviour:
@@ -962,6 +964,27 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   itemPos: {fileID: 1169952278}
+  itemGetAnimation: {fileID: 399836763}
+--- !u!95 &399836763
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 399836755}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c37f764fa99ea114cbd9d28c32280b31, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &781991576
 GameObject:
   m_ObjectHideFlags: 0
@@ -1209,7 +1232,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!61 &1298982067
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1598,7 +1621,7 @@ GameObject:
   - component: {fileID: 1706379447}
   - component: {fileID: 1706379446}
   - component: {fileID: 1706379445}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Block
   m_TagString: Untagged
   m_Icon: {fileID: 0}
