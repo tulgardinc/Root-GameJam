@@ -5,6 +5,11 @@ TagManager:
   serializedVersion: 2
   tags:
   - Pushable
+  - climbable
+  - standable
+  - pressure plate
+  - button
+  - block
   layers:
   - Default
   - TransparentFX
@@ -13,7 +18,8 @@ TagManager:
   - Water
   - UI
   - Pushable
-  - 
+  - Ground
+  - Tree
   - 
   - 
   - 
@@ -41,4 +47,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: rootLayer
+    uniqueID: 3068243641
+    locked: 0
+  - name: Player
+    uniqueID: 2695212677
     locked: 0
