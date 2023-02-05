@@ -61,7 +61,7 @@ public class PotController : MonoBehaviour
                 transform.position = pushTarget;
                 roots[roots.Count - 1].root.transform.parent = transform;
                 isBeingPushedUp = false;
-                rb.bodyType = RigidbodyType2D.Dynamic;
+                //rb.bodyType = RigidbodyType2D.Dynamic;
             }
         }
     }
@@ -71,13 +71,37 @@ public class PotController : MonoBehaviour
         HandleBeingPushed();
     }
 
+    private void
+        HandleKinematic()
+    {
+        if (roots.Count > 0)
+        {
+            rb.bodyType = RigidbodyType2D.Kinematic;
+        }
+        else
+        {
+            rb.bodyType = RigidbodyType2D.Dynamic;
+        }
+    }
+
     private void Update()
     {
+        HandleKinematic();
+
         if (roots.Count == 0)
         {
             if (Input.GetKeyDown(KeyCode.DownArrow) && !isBeingHeld)
             {
-                roots.Add(new RootWithDirection(Vector3.down, Instantiate(rootPrefab, rootPoint.transform.position, Quaternion.identity)));
+                if (GetTilesAtPos(transform.position + Vector3.up * stepSize).Length > 0)
+                {
+                    return;
+                }
+                if (GetTileAtPos(transform.position + Vector3.down * (stepSize)))
+                {
+                    isBeingPushedUp = true;
+                    pushTarget = transform.position + Vector3.up * stepSize;
+                }
+                roots.Add(new RootWithDirection(Vector3.down, Instantiate(rootPrefab, rootPoint.transform.position + Vector3.down * 0.5f, Quaternion.identity)));
                 roots[roots.Count - 1].root.transform.parent = transform;
                 roots[roots.Count - 1].root.GetComponent<SpriteRenderer>().sprite = verticalSprite;
             }
@@ -239,7 +263,7 @@ public class PotController : MonoBehaviour
                         }
                     }
                     isBeingPushedUp = true;
-                    rb.bodyType = RigidbodyType2D.Kinematic;
+                    //rb.bodyType = RigidbodyType2D.Kinematic;
                     pushTarget = transform.position + Vector3.up * stepSize;
 
                     GameObject newRootDown = Instantiate(rootPrefab, pos, Quaternion.identity);

@@ -47,7 +47,7 @@ public class CharacterMovementScript : MonoBehaviour
 
     private void CheckIfCanClimb()
     {
-        var climbCol = Physics2D.OverlapCircle(transform.position, 1.5f, LayerMask.GetMask("RootVertical"));
+        var climbCol = Physics2D.OverlapCircle(transform.position, 0.5f, LayerMask.GetMask("RootVertical"));
         climbCandidate = climbCol ? climbCol.gameObject : null;
     }
 
@@ -128,6 +128,7 @@ public class CharacterMovementScript : MonoBehaviour
                 test.isTrigger = true;
             }
         }
+
 
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
     }

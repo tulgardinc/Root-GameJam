@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 5532713}
   - component: {fileID: 5532714}
   - component: {fileID: 5532715}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Box
   m_TagString: Pushable
   m_Icon: {fileID: 0}
@@ -269,7 +269,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!1001 &561231714
 PrefabInstance:
@@ -297,6 +297,10 @@ PrefabInstance:
     - target: {fileID: 1144647695947386525, guid: 7b5d98bf97cfbf3759bcdde73e400d0d, type: 3}
       propertyPath: m_BodyType
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1144647695947386525, guid: 7b5d98bf97cfbf3759bcdde73e400d0d, type: 3}
+      propertyPath: m_CollisionDetection
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1144647695947386527, guid: 7b5d98bf97cfbf3759bcdde73e400d0d, type: 3}
       propertyPath: m_RootOrder
@@ -1543,7 +1547,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!61 &925877484
 BoxCollider2D:
@@ -1770,7 +1774,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8018564934178106050, guid: 9239c2733594a1343afa38d7df369567, type: 3}
       propertyPath: whatIsGround.m_Bits
-      value: 1
+      value: 73
       objectReference: {fileID: 0}
     - target: {fileID: 8018564934178106051, guid: 9239c2733594a1343afa38d7df369567, type: 3}
       propertyPath: m_Material
@@ -1787,6 +1791,10 @@ PrefabInstance:
     - target: {fileID: 8018564934178106054, guid: 9239c2733594a1343afa38d7df369567, type: 3}
       propertyPath: m_Layer
       value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 8018564934178106063, guid: 9239c2733594a1343afa38d7df369567, type: 3}
+      propertyPath: canGetRadius
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8018564934178106063, guid: 9239c2733594a1343afa38d7df369567, type: 3}
       propertyPath: itemLayer.m_Bits
