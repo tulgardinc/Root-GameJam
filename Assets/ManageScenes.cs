@@ -24,15 +24,28 @@ public class ManageScenes : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(isPLayerHere && isTreeHere) 
+        Debug.Log(isTreeHere);
+        Debug.Log(isPLayerHere);
+        if (isPLayerHere && isTreeHere) 
         {
+            Debug.Log("Changing Scene");
             SceneManager.LoadScene(nextSceneName);
         }
     }
-
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.transform.tag.Equals("player"))
+        if (collision.transform.tag.Equals("Player"))
+        {
+            isPLayerHere = false;
+        }
+        if (collision.transform.tag.Equals("flower"))
+        {
+            isTreeHere = false;
+        }
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.transform.tag.Equals("Player"))
         {
             isPLayerHere = true;
         }
@@ -41,4 +54,5 @@ public class ManageScenes : MonoBehaviour
             isTreeHere = true;
         }
     }
+  
 }
