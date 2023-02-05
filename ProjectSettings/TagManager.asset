@@ -11,19 +11,20 @@ TagManager:
   - button
   - block
   - flower
+  - root
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Root
+  - RootHorizontal
   - Water
   - UI
   - Pushable
   - Ground
   - Tree
   - Player
-  - 
-  - 
+  - RootVertical
+  - Flower
   - 
   - 
   - 

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PickupSystem : MonoBehaviour
@@ -11,7 +12,14 @@ public class PickupSystem : MonoBehaviour
     bool itemPicked = false;
     [SerializeField] Animator itemGetAnimation;
 
+    CharacterMovementScript movementScr;
+
     GameObject pickedObject;
+
+    private void Start()
+    {
+        movementScr = GetComponent<CharacterMovementScript>();
+    }
 
     void Update()
     {
@@ -20,16 +28,21 @@ public class PickupSystem : MonoBehaviour
         {
             itemInRange = candidate;
         }
+        else
+        {
+            itemInRange = null;
+        }
 
         if (itemInRange)
         {
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.E) && !movementScr.isClimbing)
             {
                 if (itemPicked)
                 {
                     itemGetAnimation.SetBool("isPicked", false);
                     itemPicked = false;
                     pickedObject.GetComponent<Rigidbody2D>().gravityScale = 1;
+                    pickedObject.GetComponent<PotController>().isBeingHeld = false;
                     pickedObject = null;
                 }
                 else
@@ -37,8 +50,9 @@ public class PickupSystem : MonoBehaviour
                     itemGetAnimation.SetBool("isPicked", true);
                     pickedObject = itemInRange.gameObject;
                     Debug.Log("picked");
-                    itemPicked = true;
+                    pickedObject.GetComponent<PotController>().isBeingHeld = true;
                     pickedObject.GetComponent<Rigidbody2D>().gravityScale = 0;
+                    itemPicked = true;
                 }
             }
 

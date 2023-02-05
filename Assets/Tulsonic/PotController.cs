@@ -24,6 +24,8 @@ public class PotController : MonoBehaviour
     bool isBeingPushedUp = false;
     Vector3 pushTarget;
 
+    [HideInInspector] public bool isBeingHeld = false;
+
     Rigidbody2D rb;
 
     private void Start()
@@ -73,11 +75,19 @@ public class PotController : MonoBehaviour
     {
         if (roots.Count == 0)
         {
-            if (Input.GetKeyDown(KeyCode.DownArrow))
+            if (Input.GetKeyDown(KeyCode.DownArrow) && !isBeingHeld)
             {
                 roots.Add(new RootWithDirection(Vector3.down, Instantiate(rootPrefab, rootPoint.transform.position, Quaternion.identity)));
                 roots[roots.Count - 1].root.transform.parent = transform;
                 roots[roots.Count - 1].root.GetComponent<SpriteRenderer>().sprite = verticalSprite;
+            }
+        }
+        else if (isBeingHeld)
+        {
+            for (int i = 0; i < roots.Count; i++)
+            {
+                Destroy(roots[i].root);
+                roots.RemoveAt(i);
             }
         }
         else
@@ -183,10 +193,10 @@ public class PotController : MonoBehaviour
 
     private bool AddNewRoot(Vector3 pos, Vector3 dir, Sprite sprite)
     {
-        if (isBeingPushedUp) return false;
+        if (isBeingPushedUp || isBeingHeld) return false;
 
         Collider2D col = GetTileAtPos(pos + dir * (stepSize));
-        if (col == null || col.gameObject.layer != LayerMask.NameToLayer("Root"))
+        if (col == null || col.gameObject.tag != "root")
         {
             if (col != null && col.gameObject.tag == "Pushable")
             {
@@ -209,7 +219,7 @@ public class PotController : MonoBehaviour
                 }
                 else
                 {
-                    if (GetTilesAtPos(transform.position + Vector3.up * stepSize).Length > 0)
+                    if (GetTilesAtPos(transform.position + Vector3.up * stepSize).Length > 0 || isBeingHeld)
                     {
                         return false;
                     }
@@ -272,5 +282,13 @@ public class RootWithDirection
     {
         this.direction = direction;
         this.root = root;
+        if (direction == Vector3.up || direction == Vector3.down)
+        {
+            this.root.layer = LayerMask.NameToLayer("RootVertical");
+        }
+        else
+        {
+            this.root.layer = LayerMask.NameToLayer("RootHorizontal");
+        }
     }
 }

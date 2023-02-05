@@ -20,6 +20,8 @@ public class CharacterMovementScript : MonoBehaviour
     [Header("Special")]
     [SerializeField] int extraJumpCount;
     [SerializeField] float climbSpeed;
+    [SerializeField] float climbJumpVert;
+    [SerializeField] float climbJumpHorz;
     [SerializeField] LayerMask altLayer;
 
     [SerializeField] Animator animatorCharacter;
@@ -29,69 +31,75 @@ public class CharacterMovementScript : MonoBehaviour
     float input;
     bool facingRight = true;
     bool isGrounded = false;
-    bool isClimbing = false;
+    [HideInInspector] public bool isClimbing = false;
     bool isOnTri = false;
     bool isOnCol = false;
     float tempInt;
     BoxCollider2D test;
-    GameObject tempObject;
+    GameObject climbCandidate;
     int currentExtraJumpCount;
-
-
 
     void Start()
     {
         currentExtraJumpCount = extraJumpCount;
         test = GetComponent<BoxCollider2D>();
+    }
 
-
+    private void CheckIfCanClimb()
+    {
+        var climbCol = Physics2D.OverlapCircle(transform.position, 1.5f, LayerMask.GetMask("RootVertical"));
+        climbCandidate = climbCol ? climbCol.gameObject : null;
     }
 
     void Update()
     {
-        
+        CheckIfCanClimb();
+
         input = Input.GetAxisRaw("Horizontal");
 
-        if(Input.GetAxis("Horizontal") != 0)
+        if (Input.GetAxis("Horizontal") != 0)
         {
-
             animatorCharacter.SetBool("isWalking", true);
-
         }
         else
         {
             animatorCharacter.SetBool("isWalking", false);
-
         }
 
         if (isGrounded)
         {
             currentExtraJumpCount = extraJumpCount;
             animatorCharacter.SetBool("isJumping", false);
-
         }
-
 
         if (Input.GetButtonDown("Jump"))
         {
             animatorCharacter.SetBool("isJumping", true);
-
-            if (isGrounded || currentExtraJumpCount > 0)
+            if (!isClimbing)
             {
-                Jump();
+                if (isGrounded || currentExtraJumpCount > 0)
+                {
+                    Jump();
+                }
+                else if (currentExtraJumpCount > 0)
+                {
+                    currentExtraJumpCount--;
+                    Jump();
+                }
             }
-            else if (currentExtraJumpCount > 0)
+            else
             {
-                currentExtraJumpCount--;
-                Jump();
+                isClimbing = false;
+                rb.AddForce(new Vector2(input * climbJumpHorz, climbJumpVert));
             }
         }
-        if(isOnTri && !animatorCharacter.GetBool("isPicked"))
+        if (!animatorCharacter.GetBool("isPicked") && climbCandidate != null)
         {
             if (Input.GetKeyDown(KeyCode.E) && !isClimbing)
             {
                 rb.gravityScale = 0;
                 isClimbing = true;
+                rb.velocity = Vector3.zero;
 
             }
             else if (Input.GetKeyDown(KeyCode.E) && isClimbing)
@@ -102,16 +110,13 @@ public class CharacterMovementScript : MonoBehaviour
             }
             if (isClimbing)
             {
-                this.transform.position = new Vector2(tempObject.transform.position.x, transform.position.y);
+                transform.position = new Vector2(climbCandidate.transform.position.x, transform.position.y);
                 Climb();
                 animatorCharacter.SetBool("isClimbing", true);
-
-
             }
             else
             {
                 animatorCharacter.SetBool("isClimbing", false);
-
             }
 
 
@@ -120,35 +125,31 @@ public class CharacterMovementScript : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.S))
             {
-                test.isTrigger= true;
+                test.isTrigger = true;
             }
         }
+
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
     }
 
     void FixedUpdate()
     {
-
-        
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
-        
         // Extra falling speed
         if (!isGrounded && !isClimbing)
         {
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y - fallSpeed);
         }
-        rb.velocity = new Vector2(input * speed*Time.deltaTime, rb.velocity.y);
+        rb.velocity = new Vector2(input * speed * Time.deltaTime, rb.velocity.y);
 
         if (input != 0 && facingRight != input > 0)
         {
             Flip();
         }
-
     }
 
     void Jump()
     {
         rb.velocity = Vector2.up * jumpForce;
-
     }
 
     void Flip()
@@ -162,10 +163,10 @@ public class CharacterMovementScript : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.transform.tag.Equals("standable"))
+        if (collision.transform.tag.Equals("standable"))
         {
             isOnCol = true;
-          
+
         }
     }
     private void OnCollisionExit2D(Collision2D collision)
@@ -176,7 +177,6 @@ public class CharacterMovementScript : MonoBehaviour
     {
         Debug.Log("Enter");
         isOnTri = true;
-        tempObject = collision.gameObject;
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
@@ -192,26 +192,26 @@ public class CharacterMovementScript : MonoBehaviour
 
         if (collision.transform.tag.Equals("standable"))
         {
-            isOnCol= false;
+            isOnCol = false;
             test.isTrigger = false;
-           
+
         }
 
     }
 
 
-    
+
     void Climb()
     {
-        if(Input.GetKey(KeyCode.W))
+        if (Input.GetKey(KeyCode.W))
         {
-            this.transform.position = new Vector2(transform.position.x, transform.position.y + climbSpeed*Time.deltaTime);
-            
+            this.transform.position = new Vector2(transform.position.x, transform.position.y + climbSpeed * Time.deltaTime);
+
             //rb.velocity = new vector2(rb.velocity.x , rb.velocity.y + climbspeed);
         }
         else if (Input.GetKey(KeyCode.S))
         {
-            this.transform.position = new Vector2(transform.position.x, transform.position.y - climbSpeed*Time.deltaTime);
+            this.transform.position = new Vector2(transform.position.x, transform.position.y - climbSpeed * Time.deltaTime);
 
             //rb.velocity = new vector2(rb.velocity.x , rb.velocity.y + climbspeed);
         }
