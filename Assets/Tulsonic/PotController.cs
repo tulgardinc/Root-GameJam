@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Unity.VisualStudio.Editor;
 using Unity.VisualScripting;
+using UnityEditor.U2D.Path;
 using UnityEngine;
 using UnityEngine.Animations;
 
