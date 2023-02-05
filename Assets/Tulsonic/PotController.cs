@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Unity.VisualStudio.Editor;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -85,7 +87,6 @@ public class PotController : MonoBehaviour
                 }
                 else
                 {
-                    print(lastRoot.root);
                     if (AddNewRoot(lastRoot.root.transform.position, Vector3.down, verticalSprite))
                     {
                         if (lastRoot.direction == Vector3.right)
@@ -180,12 +181,12 @@ public class PotController : MonoBehaviour
     {
         if (isBeingPushedUp) return false;
 
-        Collider2D col = IsTileEmpty(pos + dir * (stepSize));
+        Collider2D col = GetTileAtPos(pos + dir * (stepSize));
         if (col == null || col.gameObject.layer != LayerMask.NameToLayer("Root"))
         {
             if (col != null && col.gameObject.tag == "Pushable")
             {
-                var innerCol = IsTileEmpty(col.gameObject.transform.position + dir * (stepSize));
+                var innerCol = GetTileAtPos(col.gameObject.transform.position + (col.gameObject.GetComponent<BoxCollider2D>().size.x / 2 + stepSize) * dir);
                 Pushable pushable = col.gameObject.GetComponent<Pushable>();
                 if (!innerCol && !pushable.isMoving)
                 {
@@ -196,7 +197,6 @@ public class PotController : MonoBehaviour
                     return false;
                 }
             }
-            print(pos);
             if (col != null && col.gameObject.layer == LayerMask.NameToLayer("Default"))
             {
                 if (dir != Vector3.down)
@@ -205,6 +205,25 @@ public class PotController : MonoBehaviour
                 }
                 else
                 {
+                    if (GetTilesAtPos(transform.position + Vector3.up * stepSize).Length > 0)
+                    {
+                        return false;
+                    }
+                    foreach (var rootD in roots)
+                    {
+                        Collider2D[] tiles = GetTilesAtPos(rootD.root.transform.position + Vector3.up * stepSize);
+                        if (tiles.Length == 0 ||
+                        !Array.Exists(tiles, tile =>
+                        tile.gameObject.layer == LayerMask.NameToLayer("Default"))
+                        )
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
                     isBeingPushedUp = true;
                     rb.bodyType = RigidbodyType2D.Kinematic;
                     pushTarget = transform.position + Vector3.up * stepSize;
@@ -220,7 +239,12 @@ public class PotController : MonoBehaviour
         return false;
     }
 
-    private Collider2D IsTileEmpty(Vector3 pos)
+    private Collider2D[] GetTilesAtPos(Vector3 pos)
+    {
+        return Physics2D.OverlapBoxAll(pos, new Vector2(0.5f, 0.5f), 0);
+    }
+
+    private Collider2D GetTileAtPos(Vector3 pos)
     {
         return Physics2D.OverlapBox(pos, new Vector2(0.5f, 0.5f), 0);
     }
