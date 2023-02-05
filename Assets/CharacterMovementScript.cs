@@ -20,7 +20,9 @@ public class CharacterMovementScript : MonoBehaviour
     [Header("Special")]
     [SerializeField] int extraJumpCount;
     [SerializeField] float climbSpeed;
-        [SerializeField] LayerMask altLayer;
+    [SerializeField] LayerMask altLayer;
+
+    [SerializeField] Animator animatorCharacter;
 
 
 
@@ -30,7 +32,7 @@ public class CharacterMovementScript : MonoBehaviour
     bool isClimbing = false;
     bool isOnTri = false;
     bool isOnCol = false;
-    
+    float tempInt;
     BoxCollider2D test;
     GameObject tempObject;
     int currentExtraJumpCount;
@@ -47,15 +49,44 @@ public class CharacterMovementScript : MonoBehaviour
 
     void Update()
     {
+        
         input = Input.GetAxisRaw("Horizontal");
+
+
+        if(!(input == tempInt))
+        {
+            Debug.Log("Walking");
+            animatorCharacter.SetBool("isWalking", true);
+            if (animatorCharacter.GetBool("isWalking") && animatorCharacter.GetBool("isJumping"))
+            {
+                animatorCharacter.SetBool("isWalking", false);
+
+            }
+            else
+            {
+                animatorCharacter.SetBool("isWalking", true);
+
+            }
+        }
+        else
+        {
+            animatorCharacter.SetBool("isWalking", false);
+
+        }
+        tempInt = input;
 
         if (isGrounded)
         {
             currentExtraJumpCount = extraJumpCount;
+            animatorCharacter.SetBool("isJumping", false);
+
         }
+
 
         if (Input.GetButtonDown("Jump"))
         {
+            animatorCharacter.SetBool("isJumping", true);
+
             if (isGrounded || currentExtraJumpCount > 0)
             {
                 Jump();
@@ -106,7 +137,6 @@ public class CharacterMovementScript : MonoBehaviour
         {
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y - fallSpeed);
         }
-
         rb.velocity = new Vector2(input * speed, rb.velocity.y);
 
         if (input != 0 && facingRight != input > 0)
@@ -119,6 +149,7 @@ public class CharacterMovementScript : MonoBehaviour
     void Jump()
     {
         rb.velocity = Vector2.up * jumpForce;
+
     }
 
     void Flip()
