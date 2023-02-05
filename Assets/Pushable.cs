@@ -19,14 +19,21 @@ public class Pushable : MonoBehaviour
     {
         if (isMoving)
         {
-            Vector2 velocity = (target - transform.position).normalized;
-            Vector2 position2D = new Vector2(transform.position.x, transform.position.y);
-            rb.MovePosition(position2D + velocity * speed * Time.deltaTime);
             if (Vector3.Distance(transform.position, target) < 0.2f)
             {
                 transform.position = target;
                 isMoving = false;
             }
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (isMoving)
+        {
+            Vector2 velocity = (target - transform.position).normalized;
+            Vector2 position2D = new Vector2(transform.position.x, transform.position.y);
+            rb.MovePosition(position2D + velocity * speed * Time.deltaTime);
         }
     }
 

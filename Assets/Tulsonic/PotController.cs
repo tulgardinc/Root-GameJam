@@ -64,11 +64,13 @@ public class PotController : MonoBehaviour
         }
     }
 
+    private void FixedUpdate()
+    {
+        HandleBeingPushed();
+    }
+
     private void Update()
     {
-
-        HandleBeingPushed();
-
         if (roots.Count == 0)
         {
             if (Input.GetKeyDown(KeyCode.DownArrow))
