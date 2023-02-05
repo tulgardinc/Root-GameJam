@@ -172,7 +172,11 @@ public class CharacterMovementScript : MonoBehaviour
     }
     private void OnCollisionExit2D(Collision2D collision)
     {
-        isOnCol = false;
+        if (collision.transform.tag.Equals("standable"))
+        {
+            isOnCol = false;
+
+        }
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -181,10 +185,9 @@ public class CharacterMovementScript : MonoBehaviour
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        Debug.Log("Exit");
-        isOnTri = false;
         if (collision.transform.tag.Equals("climbable"))
         {
+            isOnTri = false;
             rb.gravityScale = 1;
             isClimbing = false;
             animatorCharacter.SetBool("isClimbing", false);

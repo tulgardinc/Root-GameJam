@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
-public class DoorScript : MonoBehaviour
+public class DoorTwo : MonoBehaviour
 {
 
 
     [SerializeField] ButtonsScript buttonToConnect;
-    [SerializeField] ButtonsScript buttonTwoConnect;
     [SerializeField] GameObject referencePointUp;
     [SerializeField] GameObject referencePointDown;
     [SerializeField] float doorSpeed;
@@ -20,23 +19,14 @@ public class DoorScript : MonoBehaviour
     }
     private void OnEnable()
     {
-        if(buttonToConnect.gameObject.tag.Equals("pressure plate") )
+        if(buttonToConnect.gameObject.tag.Equals("pressure plate"))
         {
             ButtonsScript.onPressed += OpenDoor;
             ButtonsScript.onRelease += CloseDoor;
 
 
         }
-        else if (buttonTwoConnect.gameObject.tag.Equals("pressure plate")) {
-                ButtonsScript.onPressed += OpenDoor;
-                ButtonsScript.onRelease += CloseDoor;
-        }
-            
         if (buttonToConnect.gameObject.tag.Equals("button"))
-        {
-            ButtonsScript.onClicked += tempOpen;
-
-        }else if (buttonTwoConnect.gameObject.tag.Equals("button"))
         {
             ButtonsScript.onClicked += tempOpen;
 
@@ -45,7 +35,6 @@ public class DoorScript : MonoBehaviour
     private void OnDisable()
     {
 
-
         if (buttonToConnect.gameObject.tag.Equals("pressure plate"))
         {
             ButtonsScript.onPressed -= OpenDoor;
@@ -53,18 +42,7 @@ public class DoorScript : MonoBehaviour
 
 
         }
-        else if (buttonTwoConnect.gameObject.tag.Equals("pressure plate"))
-        {
-            ButtonsScript.onPressed -= OpenDoor;
-            ButtonsScript.onRelease -= CloseDoor;
-        }
-
         if (buttonToConnect.gameObject.tag.Equals("button"))
-        {
-            ButtonsScript.onClicked -= tempOpen;
-
-        }
-        else if (buttonTwoConnect.gameObject.tag.Equals("button"))
         {
             ButtonsScript.onClicked -= tempOpen;
 
