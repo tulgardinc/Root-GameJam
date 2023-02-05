@@ -10,7 +10,9 @@ public class PickupSystem : MonoBehaviour
     [SerializeField] Transform itemPos;
     bool itemPicked = false;
     bool isClicked = false;
-    
+    [SerializeField] Animator itemGetAnimation;
+
+
 
     GameObject temp;
     // Start is called before the first frame update
@@ -35,6 +37,8 @@ public class PickupSystem : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.R) && !isClicked)
             {
                 isClicked= true;
+                itemGetAnimation.SetBool("isPicked", true);
+
                 Debug.Log("picked");
                 itemPicked = true;
                 temp.GetComponent<Rigidbody2D>().gravityScale = 0;
@@ -43,6 +47,7 @@ public class PickupSystem : MonoBehaviour
             } else if (Input.GetKeyDown(KeyCode.R) && isClicked)
             {
                 isClicked = false;
+                itemGetAnimation.SetBool("isPicked", false);
                 itemPicked = false;
                 temp.GetComponent<Rigidbody2D>().gravityScale = 1;
             }
