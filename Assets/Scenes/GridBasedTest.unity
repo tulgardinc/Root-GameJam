@@ -408,8 +408,8 @@ MonoBehaviour:
   - {x: 0, y: 68, z: 0}
   - {x: 0, y: 0, z: 0}
   m_ShapePathHash: 0
-  m_Mesh: {fileID: 1338098098}
-  m_InstanceId: 42802
+  m_Mesh: {fileID: 1360635761}
+  m_InstanceId: 37742
 --- !u!19719996 &577068131
 TilemapCollider2D:
   m_ObjectHideFlags: 0
@@ -1243,7 +1243,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2, y: 2}
   m_EdgeRadius: 0
---- !u!43 &962628923
+--- !u!43 &941669690
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1532,6 +1532,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 8018564933346124416, guid: 9239c2733594a1343afa38d7df369567, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 8018564933346124419, guid: 9239c2733594a1343afa38d7df369567, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.9497392
@@ -1592,17 +1596,29 @@ PrefabInstance:
       propertyPath: whatIsGround.m_Bits
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8018564934178106051, guid: 9239c2733594a1343afa38d7df369567, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 6200000, guid: 5957cea42799db4fd861ec4b2d43081b, type: 2}
     - target: {fileID: 8018564934178106054, guid: 9239c2733594a1343afa38d7df369567, type: 3}
       propertyPath: m_Name
-      value: PlayerTemp
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 8018564934178106054, guid: 9239c2733594a1343afa38d7df369567, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 8018564934178106063, guid: 9239c2733594a1343afa38d7df369567, type: 3}
       propertyPath: itemLayer.m_Bits
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 8018564934475779171, guid: 9239c2733594a1343afa38d7df369567, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9239c2733594a1343afa38d7df369567, type: 3}
---- !u!43 &1338098098
+--- !u!43 &1360635761
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1766,7 +1782,7 @@ Mesh:
     offset: 0
     size: 0
     path: 
---- !u!43 &1389364385
+--- !u!43 &1540422960
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1989,8 +2005,8 @@ MonoBehaviour:
   - {x: 0, y: 68, z: 0}
   - {x: 0, y: 0, z: 0}
   m_ShapePathHash: 0
-  m_Mesh: {fileID: 962628923}
-  m_InstanceId: 42842
+  m_Mesh: {fileID: 1540422960}
+  m_InstanceId: 37784
 --- !u!483693784 &1635926015
 TilemapRenderer:
   m_ObjectHideFlags: 0
@@ -2838,8 +2854,8 @@ MonoBehaviour:
   - {x: 0, y: 68, z: 0}
   - {x: 0, y: 0, z: 0}
   m_ShapePathHash: 0
-  m_Mesh: {fileID: 1389364385}
-  m_InstanceId: 42856
+  m_Mesh: {fileID: 941669690}
+  m_InstanceId: 37798
 --- !u!1 &1830721367
 GameObject:
   m_ObjectHideFlags: 0
