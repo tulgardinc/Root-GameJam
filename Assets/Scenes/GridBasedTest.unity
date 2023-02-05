@@ -294,6 +294,10 @@ PrefabInstance:
       propertyPath: pushSpeed
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 1144647695947386524, guid: 7b5d98bf97cfbf3759bcdde73e400d0d, type: 3}
+      propertyPath: ground.m_Bits
+      value: 65
+      objectReference: {fileID: 0}
     - target: {fileID: 1144647695947386525, guid: 7b5d98bf97cfbf3759bcdde73e400d0d, type: 3}
       propertyPath: m_BodyType
       value: 0
@@ -308,11 +312,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1144647695947386527, guid: 7b5d98bf97cfbf3759bcdde73e400d0d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -11.84
+      value: -12.4
       objectReference: {fileID: 0}
     - target: {fileID: 1144647695947386527, guid: 7b5d98bf97cfbf3759bcdde73e400d0d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 6.15
+      value: 6.74
       objectReference: {fileID: 0}
     - target: {fileID: 1144647695947386527, guid: 7b5d98bf97cfbf3759bcdde73e400d0d, type: 3}
       propertyPath: m_LocalPosition.z
