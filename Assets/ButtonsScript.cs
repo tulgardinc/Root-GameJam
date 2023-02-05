@@ -13,6 +13,9 @@ public class ButtonsScript : MonoBehaviour
     [SerializeField] Sprite openState;
     [SerializeField] Sprite closeState;
 
+    [SerializeField] LayerMask clickLayer;
+    [SerializeField]float canGetRadius;
+
     bool firstTime;
     bool isPressing;
     bool isClicking;
@@ -62,8 +65,35 @@ public class ButtonsScript : MonoBehaviour
             }
         }
 
-        
-   
+        Collider2D candidate = Physics2D.OverlapCircle(transform.position, canGetRadius, clickLayer);
+        if (candidate)
+        {
+            if (this.tag.Equals("button") && !firstTime)
+            {
+                isClicking = true;
+                firstTime = true;
+
+
+            }
+            if (this.tag.Equals("pressure plate"))
+            {
+                isPressing = true;
+
+            }
+
+        }
+        else
+        {
+            if (this.tag.Equals("pressure plate"))
+            {
+                isPressing = false;
+
+
+            }
+        }
+
+
+
     }
 
 
@@ -73,14 +103,12 @@ public class ButtonsScript : MonoBehaviour
         {
             isClicking = true;
             firstTime = true;
-            this.gameObject.transform.lossyScale.Set(transform.lossyScale.x, transform.lossyScale.y - 1f, transform.lossyScale.z);
           
 
         }
         if (this.tag.Equals("pressure plate"))
         {
             isPressing = true;
-            this.gameObject.transform.lossyScale.Set(transform.lossyScale.x, transform.lossyScale.y - 1f, transform.lossyScale.z);
 
         }
 
@@ -93,7 +121,6 @@ public class ButtonsScript : MonoBehaviour
         {
             isPressing = false;
          
-            this.gameObject.transform.lossyScale.Set(transform.lossyScale.x, transform.lossyScale.y + 1f, transform.lossyScale.z);
 
         }
 
