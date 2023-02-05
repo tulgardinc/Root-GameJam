@@ -35,6 +35,7 @@ public class PotController : MonoBehaviour
     {
         Destroy(roots[roots.Count - 1].root);
         roots.RemoveAt(roots.Count - 1);
+        if (roots.Count == 0) return;
         var lastRoot = roots[roots.Count - 1];
         if (lastRoot.direction == Vector3.right || lastRoot.direction == Vector3.left)
         {
@@ -56,6 +57,7 @@ public class PotController : MonoBehaviour
             if (Vector3.Distance(transform.position, pushTarget) < 0.2f)
             {
                 transform.position = pushTarget;
+                roots[roots.Count - 1].root.transform.parent = transform;
                 isBeingPushedUp = false;
                 rb.bodyType = RigidbodyType2D.Dynamic;
             }
@@ -227,6 +229,13 @@ public class PotController : MonoBehaviour
                     isBeingPushedUp = true;
                     rb.bodyType = RigidbodyType2D.Kinematic;
                     pushTarget = transform.position + Vector3.up * stepSize;
+
+                    GameObject newRootDown = Instantiate(rootPrefab, pos, Quaternion.identity);
+
+                    newRootDown.GetComponent<SpriteRenderer>().sprite = sprite;
+                    roots.Add(new RootWithDirection(dir, newRootDown));
+
+                    return true;
                 }
             }
             GameObject newRoot = Instantiate(rootPrefab, pos + dir * stepSize, Quaternion.identity);
